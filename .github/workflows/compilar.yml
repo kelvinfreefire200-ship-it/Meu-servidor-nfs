@@ -12,7 +12,7 @@ jobs:
     - name: Checkout do código
       uses: actions/checkout@v4
 
-    - name: Baixar Dependências (Includes)
+    - name: Baixar Dependências
       run: |
         wget https://github.com/pawn-lang/samp-stdlib/archive/refs/heads/master.tar.gz -O samp-stdlib.tar.gz
         tar -xzf samp-stdlib.tar.gz
