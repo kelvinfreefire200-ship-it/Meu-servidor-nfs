@@ -23,8 +23,9 @@ jobs:
       run: |
         curl -L -o pawnc.tar.gz https://github.com/pawn-lang/compiler/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
         tar -xzf pawnc.tar.gz
-        sudo find . -name "pawncc" -exec mv {} /usr/local/bin/ \;
-        sudo find . -name "libpawnc.so" -exec mv {} /usr/local/lib/ \;
+        sudo cp pawnc-3.10.10-linux/bin/pawncc /usr/local/bin/
+        sudo cp pawnc-3.10.10-linux/lib/libpawnc.so /usr/local/lib/
+        sudo ldconfig
         sudo chmod +x /usr/local/bin/pawncc
 
     - name: Compilar o gamemode
