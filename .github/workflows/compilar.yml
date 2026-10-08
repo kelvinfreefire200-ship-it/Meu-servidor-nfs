@@ -1,0 +1,31 @@
+name: Compilar Gamemode SA-MP
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    - name: Instalar o compilador Pawn
+      run: |
+        wget https://github.com/pawn-lang/compiler/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
+        tar -xzf pawnc-3.10.10-linux.tar.gz
+        sudo mv pawnc-3.10.10/bin/pawncc /usr/local/bin/pawncc
+        sudo mv pawnc-3.10.10/lib/libpawnc.so /usr/local/lib/libpawnc.so
+        sudo chmod +x /usr/local/bin/pawncc
+
+    - name: Compilar o gamemode
+      run: |
+        pawncc nfs.pwn -onfs.amx
+
+    - name: Fazer upload do arquivo compilado
+      uses: actions/upload-artifact@v4
+      with:
+        name: gamemode-amx
+        path: nfs.amx
