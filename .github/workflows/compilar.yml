@@ -12,17 +12,24 @@ jobs:
     - name: Checkout do código
       uses: actions/checkout@v4
 
+    - name: Baixar Dependências (Includes)
+      run: |
+        wget https://github.com/pawn-lang/samp-stdlib/archive/refs/heads/master.tar.gz -O samp-stdlib.tar.gz
+        tar -xzf samp-stdlib.tar.gz
+        wget https://github.com/pawn-lang/pawn/archive/refs/heads/master.tar.gz -O pawn-master.tar.gz
+        tar -xzf pawn-master.tar.gz
+
     - name: Instalar o compilador Pawn
       run: |
-        wget https://github.com/pawn-lang/compiler/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
-        tar -xzf pawnc-3.10.10-linux.tar.gz
-        sudo mv pawnc-3.10.10/bin/pawncc /usr/local/bin/pawncc
-        sudo mv pawnc-3.10.10/lib/libpawnc.so /usr/local/lib/libpawnc.so
+        curl -L -o pawnc.tar.gz https://github.com/pawn-lang/compiler/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
+        tar -xzf pawnc.tar.gz
+        sudo find . -name "pawncc" -exec mv {} /usr/local/bin/ \;
+        sudo find . -name "libpawnc.so" -exec mv {} /usr/local/lib/ \;
         sudo chmod +x /usr/local/bin/pawncc
 
     - name: Compilar o gamemode
       run: |
-        pawncc nfs.pwn -onfs.amx
+        pawncc nfs.pwn -onfs.amx -i./samp-stdlib-master -i./pawn-master/include
 
     - name: Fazer upload do arquivo compilado
       uses: actions/upload-artifact@v4
